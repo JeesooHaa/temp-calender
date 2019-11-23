@@ -8,12 +8,17 @@ import {
   Alert
 } from 'react-native';
 import {Agenda} from 'react-native-calendars';
+// import { connect } from 'react-redux'
 
 const goToAbout = () => {
   Actions.about()
 }
 
-export default class Home extends Component {
+// const initialState = {
+//   "2017-06-14": []
+// }
+
+ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,30 +35,60 @@ export default class Home extends Component {
             "name": "0617",
           }
         ]
-      }
+      },
+      tempDate: ''
     };
   }
 
+  updateDate(temp) {
+    this.setState(
+      {tempDate: temp}
+    )
+  }
+ 
+  // updateItem() {
+  //   this.setState({
+  //     items: {
+  //       ...this.state.items,
+
+  //     }
+  //   })
+  // }
+
+  // state = initialState
+
   render() {
+    // const { items } = this.props
+  
+    // updateInput = (key, value) => {
+    //   this.setState({
+    //     ...this.state,
+    //     [key]: value
+    //   })
+    // }
+    
     return (
       <Agenda
         items={this.state.items}
         // loadItemsForMonth={this.loadItems.bind(this)}
+        onDayPress={this.onDayPress.bind(this)}
         selected={'2017-05-16'}
         renderItem={this.renderItem.bind(this)}
         renderEmptyData={this.renderEmptyData.bind(this)}
         rowHasChanged={this.rowHasChanged.bind(this)}
-
       />
     );
   }
 
   // loadItems(day) {
-
+  //   // this.updateDate(day)
+  //   // const temp = day.dateString
+  //   // this.updateDate(temp)
   //   setTimeout(() => {
   //     for (let i = -15; i < 85; i++) {
   //       const time = day.timestamp + i * 24 * 60 * 60 * 1000;
   //       const strTime = this.timeToString(time);
+  //       // console.log(strTime)
   //       if (!this.state.items[strTime]) {
   //         this.state.items[strTime] = [];
   //         const numItems = Math.floor(Math.random() * 5);
@@ -65,15 +100,20 @@ export default class Home extends Component {
   //         }
   //       }
   //     }
-  //     console.log(this.state.items);
+  //     // console.log(this.state.items);
   //     const newItems = {};
   //     Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
   //     this.setState({
   //       items: newItems
   //     });
   //   }, 1000);
-  //   console.log(`Load Items for ${day.year}-${day.month}`);
+  //   // console.log(`Load Items for ${day.year}-${day.month}`);
   // }
+
+  onDayPress(day) {
+    const temp = day.dateString
+    this.updateDate(temp)
+  }
 
   renderItem(item) {
     return (
@@ -81,7 +121,7 @@ export default class Home extends Component {
         <Text>{item.name}</Text>
         <Button
           title="Update item"
-          onPress={goToAbout}
+          onPress={()=> console.log(this.state.tempDate)}
         />
       </View>
     );
@@ -92,7 +132,7 @@ export default class Home extends Component {
       <View style={styles.emptyDate}>
         <Button
           title="Add item"
-          onPress={() => Alert.alert('Add')}
+          onPress={() => console.log(this.state.tempDate)}
         /> 
       </View>
     );
@@ -123,3 +163,9 @@ const styles = StyleSheet.create({
     paddingTop: 30
   }
 });
+
+// const mapStateToProps = (state) => ({
+//   items: state.todoReducer.items
+// })
+
+// export default connect(mapStateToProps)(Home)
